@@ -25,7 +25,12 @@ extension (i: Int)
 // Functions
 abstract class Function {
   val funcType: Class[_ <: Function] = this.getClass
-  def nonZero(i: Int = 0): Double = 0
+  val nonZero: Double = {
+    @tailrec def findNonZero(d: Double = 0): Double = {
+      if this(d) != 0 then d else if d >= 100 then Double.NaN else findNonZero(d + r.nextDouble())
+    }
+    findNonZero()
+  }
 
   // basic values
   def of: Double => Double
@@ -35,7 +40,7 @@ abstract class Function {
   def apply(f: Function): Function = {
     if f == x then this
     else if f.isConstant then Constant(this of f.as[Constant]._1)
-    else if this isInverseOf f then x
+    else if this.isInverseOf(f) then x
     else Composite(this, f)
   }
   def +(x: Double): Function = Sum(this, Constant(x))
@@ -54,12 +59,12 @@ abstract class Function {
   def !=(f: Function): Boolean = !(this == f)
   def ==(d: Double): Boolean = this == Constant(d)
   def !=(d: Double): Boolean = this != Constant(d)
-  def *=(f: Function): Boolean = f == this * f.of(nonZero()) / this.of(nonZero())
+  def *=(f: Function): Boolean = f == this * f.of(nonZero) / this.of(nonZero)
   def *=(d: Double): Boolean = this *= Constant(d)
   def !*=(f: Function): Boolean = !(this *= f)
-  def !*=(d: Double): Boolean = !(this !*= d)
-  def isInverseOf(f: Function): Boolean = tests.count((this(f) - x)(_).abs > 0.00000001) == 0
-  def findScalar(f: Function): Double = if this *= f then f(nonZero()) / this(nonZero()) else Double.NaN
+  def !*=(d: Double): Boolean = !(this *= d)
+  def isInverseOf(f: Function): Boolean = tests.count((Composite(this, f) - x)(_).abs > 0.00000001) == 0
+  def findScalar(f: Function): Double = if this *= f then f(nonZero) / this(nonZero) else Double.NaN
 
   // determines what type of function it is
   def isSum: Boolean = this.funcType.toString.toString == "class Sum"
@@ -105,9 +110,7 @@ class Sum(f: Function, g: Function) extends Function {
   val _2: Function = g
 
   def of: Double => Double = (x: Double) => (f of x) + (g of x)
-
-  // overridden functions
-  override def apply(f: Function): Function = Sum(_1(f), _2(f))
+  // TODO override default functions for optimization
 }
 
 class Product(f: Function, g: Function) extends Function {
@@ -116,7 +119,6 @@ class Product(f: Function, g: Function) extends Function {
 
   def of: Double => Double = (x: Double) => (f of x) * (g of x)
   // TODO override default functions for optimization
-  // overridden function
 }
 
 class Composite(f: Function, g: Function) extends Function {
@@ -124,6 +126,7 @@ class Composite(f: Function, g: Function) extends Function {
   val _2: Function = g
 
   def of: Double => Double = (x: Double) => f of (g of x)
+  // TODO override default functions for optimization
 }
 
 class Tetration(base: Function, exp: Function) extends Function {
@@ -140,7 +143,6 @@ class Scalar(scalar: Double, f: Function) extends Function {
   val _2: Function = f
 
   def of: Double => Double = (x: Double) => scalar * f(x)
-  // TODO override default functions for optimization
 
   override def isScalar: Boolean = true
 }
@@ -149,42 +151,28 @@ class Constant(constant: Double) extends Function {
   val _1: Double = constant
 
   def of: Double => Double = _ => constant
-  // TODO override default functions for optimization
 }
 
 class Line extends Function {
   def of: Double => Double = (x: Double) => x
-  // TODO override default functions for optimization
 }
 
 class Polynomial(exp: Double) extends Function {
   val _1: Double = exp
 
   def of: Double => Double = (x: Double) => Math.pow(x, exp)
-  // TODO override default functions for optimization
 }
 
 class Exponential(base: Double) extends Function {
   val _1: Double = base
 
   def of: Double => Double = (x: Double) => Math.pow(base, x)
-  // TODO override default functions for optimization
 }
 
 class Log(base: Double) extends Function {
   val _1: Double = base
 
   def of: Double => Double = (x: Double) => Math.log(x) / Math.log(base)
-  // TODO override default functions for optimization
-  override def apply(f: Function): Function = {
-    if f == x then this
-    else if f.isConstant then Constant(this of f.as[Constant]._1)
-    else if this isInverseOf f then x
-    else Composite(this, f)
-  }
-  override def *(f: Function): Function = Product(this, f)
-  override def /(f: Function): Function = Product(this, f ** -1)
-  override def **(x: Double): Function = Composite(Polynomial(x), this)
 }
 
 class Sine extends Function {
@@ -238,7 +226,7 @@ class ArcCotangent extends Function {
 class HyperbolicSine extends Function {
   def of: Double => Double = (x: Double) => Math.sinh(x)
 }
-// test
+
 class HyperbolicCosine extends Function {
   def of: Double => Double = (x: Double) => Math.cosh(x)
 }
@@ -250,6 +238,7 @@ class HyperbolicTangent extends Function {
 class HyperbolicSecant extends Function {
   def of: Double => Double = (x: Double) => 1.0 / Math.cosh(x)
 }
+
 class HyperbolicCosecant extends Function {
   def of: Double => Double = (x: Double) => 1.0 / Math.sinh(x)
 }
@@ -290,7 +279,21 @@ val csch: HyperbolicCosecant = HyperbolicCosecant()
 val coth: HyperbolicCotangent = HyperbolicCotangent()
 
 // important constants
-val e = Math.E
+val e: Double = Math.E
 val pi: Double = Math.PI
 val phi: Double = (1 + Math.sqrt(5)) / 2
 val tau: Double = Math.TAU
+
+// Matrices
+
+// Probability
+
+// solve linear equations
+
+@main def main(): Unit = {
+  val f = (sin(x)) ** 2
+  println(f.getClass)
+  val g = ln(f(x))
+  println(g.funcType)
+  println(g(2))
+}

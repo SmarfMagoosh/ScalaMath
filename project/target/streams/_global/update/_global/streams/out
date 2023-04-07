@@ -1,3 +1,5 @@
 [debug] not up to date. inChanged = true, force = false
-[debug] Updating ProjectRef(uri("file:/C:/Users/DREHEREN20/OneDrive%20-%20Grove%20City%20College/Desktop/Stuff/school/GitHub/ScalaMath/project/"), "scalamath-build")...
-[debug] Done updating ProjectRef(uri("file:/C:/Users/DREHEREN20/OneDrive%20-%20Grove%20City%20College/Desktop/Stuff/school/GitHub/ScalaMath/project/"), "scalamath-build")
+[debug] Updating ProjectRef(uri("file:/C:/Users/DREHEREN20/OneDrive%20-%20Grove%20City%20College/Desktop/Stuff/school/GitHub/ScalaMath/ScalaMath/project/"), "scalamath-build")...
+[warn] Unrecognized repository Scala Plugin Bundled Repository, ignoring it
+[warn] Unrecognized repository Scala Plugin Bundled Repository, ignoring it
+[debug] Done updating ProjectRef(uri("file:/C:/Users/DREHEREN20/OneDrive%20-%20Grove%20City%20College/Desktop/Stuff/school/GitHub/ScalaMath/ScalaMath/project/"), "scalamath-build")
