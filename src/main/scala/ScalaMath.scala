@@ -192,8 +192,6 @@ private class Scalar(scalar: Double, f: Func) extends Func {
   def of: Double => Double = (x: Double) => scalar * (f of x)
 
   override def isScalar: Boolean = true
-
-  override def as[T <: Func]: T = this._2.as[T]
 }
 
 private class Constant(constant: Double) extends Func {
@@ -289,7 +287,7 @@ val tau = Math.TAU
 // solve linear equations
 
 @main def main(): Unit = {
-  val f: Func = (5 * (x**2)) * (x**3) // 2x^2
-  println(f(3)) // 18
-  println(f.funcType)
+  val f: Func = (x**2) - 7
+  val test = List(1,2,3,4,5,6)
+  println(test.map(f(_)))
 }
