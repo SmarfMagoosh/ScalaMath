@@ -16,7 +16,7 @@ extension [T <: Number](d: T)
 
 // definition of function
 private abstract class Func {
-  val funcType: Class[_ <: Func] = this.getClass
+  val funcType: String = this.getClass.toString.substring(6)
   val nonZero: Double = {
     @tailrec def findNonZero(d: Double = 0): Double = {
       if this.of(d) != 0 then d else if d >= 100 then Double.NaN else findNonZero(d + r.nextDouble())
@@ -82,61 +82,61 @@ private abstract class Func {
 
   def findScalar(f: Func): Double = if this *= f then f(nonZero) / this (nonZero) else Double.NaN
 
-  def isSum: Boolean = this.funcType.toString.toString == "class Sum"
+  def isSum: Boolean = this.funcType == "Sum"
 
-  def isProduct: Boolean = this.funcType.toString == "class Product"
+  def isProduct: Boolean = this.funcType == "Product"
 
-  def isComp: Boolean = this.funcType.toString == "class Comp"
+  def isComp: Boolean = this.funcType == "Comp"
 
-  def isTetr: Boolean = this.funcType.toString == "class Tetr"
+  def isTetr: Boolean = this.funcType == "Tetr"
 
   def isScalar: Boolean = false
 
-  def isConstant: Boolean = this.funcType.toString == "class Constant"
+  def isConstant: Boolean = this.funcType == "Constant"
 
-  def isLine: Boolean = this.funcType.toString == "class Line"
+  def isLine: Boolean = this.funcType == "Line"
 
-  def isPoly: Boolean = this.funcType.toString == "class Poly"
+  def isPoly: Boolean = this.funcType == "Poly"
 
-  def isExp: Boolean = this.funcType.toString == "class Exp"
+  def isExp: Boolean = this.funcType == "Exp"
 
-  def isLog: Boolean = this.funcType.toString == "class Log"
+  def isLog: Boolean = this.funcType == "Log"
 
-  def isSine: Boolean = this.funcType.toString == "class Sine"
+  def isSine: Boolean = this.funcType == "Sine"
 
-  def isCosine: Boolean = this.funcType.toString == "class Cosine"
+  def isCosine: Boolean = this.funcType == "Cosine"
 
-  def isTangent: Boolean = this.funcType.toString == "class Tangent"
+  def isTangent: Boolean = this.funcType == "Tangent"
 
-  def isSecant: Boolean = this.funcType.toString == "class Secant"
+  def isSecant: Boolean = this.funcType == "Secant"
 
-  def isCosecant: Boolean = this.funcType.toString == "class Cosecant"
+  def isCosecant: Boolean = this.funcType == "Cosecant"
 
-  def isCotangent: Boolean = this.funcType.toString == "class Cotangent"
+  def isCotangent: Boolean = this.funcType == "Cotangent"
 
-  def isArcSine: Boolean = this.funcType.toString == "class ArcSine"
+  def isArcSine: Boolean = this.funcType == "ArcSine"
 
-  def isArcCosine: Boolean = this.funcType.toString == "class ArcCosine"
+  def isArcCosine: Boolean = this.funcType == "ArcCosine"
 
-  def isArcTangent: Boolean = this.funcType.toString == "class ArcTangent"
+  def isArcTangent: Boolean = this.funcType == "ArcTangent"
 
-  def isArcSecant: Boolean = this.funcType.toString == "class ArcSecant"
+  def isArcSecant: Boolean = this.funcType == "ArcSecant"
 
-  def isArcCosecant: Boolean = this.funcType.toString == "class ArcCosecant"
+  def isArcCosecant: Boolean = this.funcType == "ArcCosecant"
 
-  def isArcCotangent: Boolean = this.funcType.toString == "class ArcCotangent"
+  def isArcCotangent: Boolean = this.funcType == "ArcCotangent"
 
-  def isHyperbolicSine: Boolean = this.funcType.toString == "class HyperbolicSine"
+  def isHyperbolicSine: Boolean = this.funcType == "HyperbolicSine"
 
-  def isHyperbolicCosine: Boolean = this.funcType.toString == "class HyperbolicCosine"
+  def isHyperbolicCosine: Boolean = this.funcType == "HyperbolicCosine"
 
-  def isHyperbolicTangent: Boolean = this.funcType.toString == "class HyperbolicTangent"
+  def isHyperbolicTangent: Boolean = this.funcType == "HyperbolicTangent"
 
-  def isHyperbolicSecant: Boolean = this.funcType.toString == "class HyperbolicSecant"
+  def isHyperbolicSecant: Boolean = this.funcType == "HyperbolicSecant"
 
-  def isHyperbolicCosecant: Boolean = this.funcType.toString == "class HyperbolicCosecant"
+  def isHyperbolicCosecant: Boolean = this.funcType == "HyperbolicCosecant"
 
-  def isHyperbolicCotangent: Boolean = this.funcType.toString == "class HyperbolicCotangent"
+  def isHyperbolicCotangent: Boolean = this.funcType == "HyperbolicCotangent"
 
   def as[T <: Func]: T = this.asInstanceOf[T]
   def asScalar: Scalar = this.asInstanceOf[Scalar]
@@ -165,9 +165,12 @@ private class Product(f: Func, g: Func) extends Func {
     if f.isPoly && g.isPoly then Scalar(f.scale * g.scale, x**(f.as[Poly]._1 + g.as[Poly]._1)).simplify
     else if f.isExp && g.isExp then
       if f.as[Exp]._1 == g.as[Exp]._1 then Scalar(f.scale * g.scale, Exp(f.as[Exp]._1 + g.as[Exp]._1)).simplify
-      else this
+      else super.simplify
+    else if f.funcType == g.funcType then
+      if f.isScalar then Scalar(f.scale * g.scale, Comp(Poly(2), f.asScalar._2))
+      else Scalar(g.scale, Comp(Poly(2), f))
     else super.simplify
-  } // TODO implement
+  }
 }
 
 private class Comp(f: Func, g: Func) extends Func {
@@ -189,7 +192,7 @@ private class Tetr(f: Func, g: Func) extends Func {
 }
 
 private class Scalar(scalar: Double, f: Func) extends Func {
-  override val funcType: Class[_ <: Func] = f.funcType
+  override val funcType: String = f.funcType
   val _1: Double = scalar
   val _2: Func = f
 
@@ -226,68 +229,105 @@ private class Log(base: Double) extends Func {
   def of: Double => Double = (x: Double) => Math.log(x) / Math.log(base)
 }
 
+private class Sine extends Func {
+  def of: Double => Double = (x: Double) => Math.sin(x)
+}
+
+private class Cosine extends Func {
+  def of: Double => Double = (x: Double) => Math.cos(x)
+}
+
+private class Tangent extends Func {
+  def of: Double => Double = (x: Double) => Math.tan(x)
+}
+
+private class Secant extends Func {
+  def of: Double => Double = (x: Double) => 1.0 / Math.cos(x)
+}
+
+private class Cosecant extends Func {
+  def of: Double => Double = (x: Double) => 1.0 / Math.sin(x)
+}
+
+private class Cotangent extends Func {
+  def of: Double => Double = (x: Double) => 1.0 / Math.tan(x)
+}
+
+private class ArcSine extends Func {
+  def of: Double => Double = (x: Double) => Math.asin(x)
+}
+
+private class ArcCosine extends Func {
+  def of: Double => Double = (x: Double) => Math.acos(x)
+}
+
+private class ArcTangent extends Func {
+  def of: Double => Double = (x: Double) => Math.atan(x)
+}
+
+private class ArcSecant extends Func {
+  def of: Double => Double = (x: Double) => 1.0 / Math.acos(x)
+}
+
+private class ArcCosecant extends Func {
+  def of: Double => Double = (x: Double) => 1.0 / Math.asin(x)
+}
+
+private class ArcCotangent extends Func {
+  def of: Double => Double = (x: Double) => 1.0 / Math.atan(x)
+}
+
+private class HyperbolicSine extends Func {
+  def of: Double => Double = (x: Double) => Math.sinh(x)
+}
+
+private class HyperbolicCosine extends Func {
+  def of: Double => Double = (x: Double) => Math.cosh(x)
+}
+
+private class HyperbolicTangent extends Func {
+  def of: Double => Double = (x: Double) => Math.tanh(x)
+}
+
+private class HyperbolicSecant extends Func {
+  def of: Double => Double = (x: Double) => 1.0 / Math.cosh(x)
+}
+
+private class HyperbolicCosecant extends Func {
+  def of: Double => Double = (x: Double) => 1.0 / Math.sinh(x)
+}
+
+private class HyperbolicCotangent extends Func {
+  def of: Double => Double = (x: Double) => 1.0 / Math.tanh(x)
+}
+
 val ln: Log = Log(Math.E)
 val lg: Log = Log(2)
 val log: Double => Log = (d: Double) => Log(d)
 val x = Poly(1)
-val sin = new Func {
-  def of: Double => Double = (x: Double) => Math.sin(x)
-}
-val cos = new Func {
-  def of: Double => Double = (x: Double) => Math.cos(x)
-}
-val tan = new Func {
-  def of: Double => Double = (x: Double) => Math.tan(x)
-}
-val sec = new Func {
-  def of: Double => Double = (x: Double) => 1.0 / Math.cos(x)
-}
-val csc = new Func {
-  def of: Double => Double = (x: Double) => 1.0 / Math.sin(x)
-}
-val cot = new Func {
-  def of: Double => Double = (x: Double) => 1.0 / Math.tan(x)
-}
-val arcsin = new Func {
-  def of: Double => Double = (x: Double) => Math.asin(x)
-}
-val arccos = new Func {
-  def of: Double => Double = (x: Double) => Math.acos(x)
-}
-val arctan = new Func {
-  def of: Double => Double = (x: Double) => Math.atan(x)
-}
-val arcsec = new Func {
-  def of: Double => Double = (x: Double) => 1.0 / Math.acos(x)
-}
-val arccsc = new Func {
-  def of: Double => Double = (x: Double) => 1.0 / Math.asin(x)
-}
-val arccot = new Func {
-  def of: Double => Double = (x: Double) => 1.0 / Math.atan(x)
-}
-val sinh = new Func {
-  def of: Double => Double = (x: Double) => Math.sinh(x)
-}
-val cosh = new Func {
-  def of: Double => Double = (x: Double) => Math.cosh(x)
-}
-val tanh = new Func {
-  def of: Double => Double = (x: Double) => Math.tanh(x)
-}
-val sech = new Func {
-  def of: Double => Double = (x: Double) => 1.0 / Math.cosh(x)
-}
-val csch = new Func {
-  def of: Double => Double = (x: Double) => 1.0 / Math.sinh(x)
-}
-val coth = new Func {
-  def of: Double => Double = (x: Double) => 1.0 / Math.tanh(x)
-}
+val sin = Sine()
+val cos = Cosine()
+val tan = Tangent()
+val sec = Secant()
+val csc = Cosecant()
+val cot = Cotangent()
+val arcsin = ArcSine()
+val arccos = ArcCosine()
+val arctan = ArcTangent()
+val arcsec = ArcSecant()
+val arccsc = ArcCosecant()
+val arccot = ArcCotangent()
+val sinh = HyperbolicSine()
+val cosh = HyperbolicCosine()
+val tanh = HyperbolicTangent()
+val sech = HyperbolicSecant()
+val csch = HyperbolicCosecant()
+val coth = HyperbolicCotangent()
 val e = Math.E
 val pi = Math.PI
 val phi = (1 + Math.sqrt(5)) / 2
 val tau = Math.TAU
+
 // Matrices
 
 // Probability
@@ -295,9 +335,8 @@ val tau = Math.TAU
 // solve linear equations
 
 @main def main(): Unit = {
-  val f: Func = (3*x) * (2*x)
-  val test = List(1,2,3,4,5,6)
+  val f: Func = (2*(x**0.5))*(0.25 * (x**3))
   println(f.getClass)
   println(f.funcType)
-  println(f(2))
+  println(f of pi)
 }
