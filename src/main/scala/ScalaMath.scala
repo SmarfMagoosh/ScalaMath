@@ -23,7 +23,7 @@ private abstract class Func {
     }
     findNonZero()
   }
-  val scale = if this.isScalar then this.as[Scalar]._1 else 1
+  def scale: Double = if isScalar then asScalar._1 else 1
 
   def of: Double => Double
 
@@ -139,6 +139,7 @@ private abstract class Func {
   def isHyperbolicCotangent: Boolean = this.funcType.toString == "class HyperbolicCotangent"
 
   def as[T <: Func]: T = this.asInstanceOf[T]
+  def asScalar: Scalar = this.asInstanceOf[Scalar]
 }
 
 private class Erf extends Func {
@@ -151,7 +152,7 @@ private class Sum(f: Func, g: Func) extends Func {
 
   def of: Double => Double = (x: Double) => f(x) + g(x)
 
-  override def simplify: Func = if f *= g then Scalar(f.scale + g.scale, f.as[Scalar]._2) else this
+  override def simplify: Func = if f *= g then Scalar(f.scale + g.scale, f.asScalar._2).simplify else this
 }
 
 private class Product(f: Func, g: Func) extends Func {
@@ -161,7 +162,10 @@ private class Product(f: Func, g: Func) extends Func {
   def of: Double => Double = (x: Double) => f(x) * g(x)
 
   override def simplify: Func = {
-    if f.isPoly && g.isPoly then Scalar(f.scale * g.scale, x**(f.as[Poly]._1 + g.as[Poly]._1))
+    if f.isPoly && g.isPoly then Scalar(f.scale * g.scale, x**(f.as[Poly]._1 + g.as[Poly]._1)).simplify
+    else if f.isExp && g.isExp then
+      if f.as[Exp]._1 == g.as[Exp]._1 then Scalar(f.scale * g.scale, Exp(f.as[Exp]._1 + g.as[Exp]._1)).simplify
+      else this
     else super.simplify
   } // TODO implement
 }
@@ -191,7 +195,11 @@ private class Scalar(scalar: Double, f: Func) extends Func {
 
   def of: Double => Double = (x: Double) => scalar * (f of x)
 
+  override def simplify: Func = if scalar == 1 then f else super.simplify
+
   override def isScalar: Boolean = true
+
+  override def as[T <: Func]: T = f.as[T]
 }
 
 private class Constant(constant: Double) extends Func {
@@ -287,7 +295,9 @@ val tau = Math.TAU
 // solve linear equations
 
 @main def main(): Unit = {
-  val f: Func = (x**2) - 7
+  val f: Func = (3*x) * (2*x)
   val test = List(1,2,3,4,5,6)
-  println(test.map(f(_)))
+  println(f.getClass)
+  println(f.funcType)
+  println(f(2))
 }
