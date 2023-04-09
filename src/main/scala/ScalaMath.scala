@@ -21,12 +21,13 @@ extension (f: Func)
     def prime: Func = Erf()
     def integral: Func = Erf()
   }
+
 // definition of function
 private abstract class Func {
   val funcType: String = this.getClass.toString.substring(6)
   val nonZero: Double = {
     @tailrec def findNonZero(d: Double = 0): Double = {
-      if this.of(d) != 0 then d else if d >= 100 then Double.NaN else findNonZero(d + r.nextDouble())
+      if this.of(d) != 0 && this.of(d) < Int.MaxValue then d else if d >= 100 then Double.NaN else findNonZero(d + r.nextDouble())
     }
     findNonZero()
   }
@@ -61,7 +62,7 @@ private abstract class Func {
   def !*=(f: Func): Boolean = !(this *= f)
   def !*=(d: Double): Boolean = !(this *= d)
   def isInverseOf(f: Func): Boolean = tests.count(Sum(Comp(this, f), Scalar(-1, x))(_).abs > 0.00000001) == 0
-  def findScalar(f: Func): Double = if this *= f then f(nonZero) / this (nonZero) else Double.NaN
+  def findScalar(f: Func): Double = if this *= f then f(nonZero) / this(nonZero) else Double.NaN
   def isSum: Boolean = this.funcType == "Sum"
   def isProduct: Boolean = this.funcType == "Product"
   def isComp: Boolean = this.funcType == "Comp"
@@ -114,7 +115,19 @@ private class Product(f: Func, g: Func) extends Func {
   val _2: Func = g
   def of: Double => Double = (d: Double) => f(d) * g(d)
   def prime: Func = Sum(Product(f.prime, g).simplify, Product(f, g.prime).simplify).simplify
-  def integral: Func = Erf() // TODO try to solve
+  def integral: Func = {
+    if f.isComp then chainIntegrate(f.as[Comp], g)
+    else if g.isComp then chainIntegrate(g.as[Comp], f)
+    else try {
+      partsIntegrate(f, g)
+    } catch {
+      case _ => try {
+        partsIntegrate(g, f)
+      } catch {
+        case _ => Erf()
+      }
+    }
+  } // TODO try to solve
   override def simplify: Func = {
     if f.isPoly && g.isPoly then Scalar(f.scale * g.scale, x**(f.as[Poly]._1 + g.as[Poly]._1)).simplify
     else if f.isExp && g.isExp then
@@ -125,6 +138,12 @@ private class Product(f: Func, g: Func) extends Func {
       else Scalar(g.scale, Comp(Poly(2), f))
     else super.simplify
   }
+  private def chainIntegrate(comp: Comp, o: Func): Func = {
+    if comp._2.prime *= o then (comp._2.prime findScalar o) * comp._1(comp._2) else Erf()
+  }
+  private def partsIntegrate(v: Func, u: Func): Func = {
+    Erf() // TODO solve
+  }
 }
 
 private class Comp(f: Func, g: Func) extends Func {
@@ -132,7 +151,7 @@ private class Comp(f: Func, g: Func) extends Func {
   val _2: Func = g
   def of: Double => Double = (d: Double) => f(g(d))
   def prime: Func = Product(Comp(f.prime, g), g.prime)
-  def integral: Func = Erf() // TODO solve
+  def integral: Func = Erf()
   override def simplify: Func = {
     if f.isPoly && g.isPoly then Scalar(f.scale * Math.pow(g.scale, f.as[Poly]._1), Poly(f.as[Poly]._1 * g.as[Poly]._1))
     else if f.isLog then
@@ -178,7 +197,7 @@ private class Poly(exp: Double) extends Func {
   val _1: Double = exp
   def of: Double => Double = (x: Double) => Math.pow(x, exp)
   def prime: Func = exp * Poly(exp - 1)
-  def integral: Func = (1.0 / (exp + 1)) * Poly(exp + 1)
+  def integral: Func = if exp == -1 then ln else (1.0 / (exp + 1)) * Poly(exp + 1)
   override def simplify: Func = if _1 == 0 then Constant(1) else super.simplify
 }
 
@@ -192,7 +211,7 @@ private class Exp(base: Double) extends Func {
 private class Log(base: Double) extends Func {
   val _1: Double = base
   def of: Double => Double = (x: Double) => Math.log(x) / Math.log(base)
-  def prime: Func = Scalar(1.0 / base, Poly(-1))
+  def prime: Func = 1.0 / (ln(base) * x)
   def integral: Func = Sum(Product(x, this).simplify, Scalar(-1.0 / ln(base), x).simplify).simplify
 }
 
@@ -354,7 +373,8 @@ val tau = Math.TAU
 // Probability
 
 // solve linear equations
-@main def main(): Unit = {
-  val f = arcsin(sin(x))
-  println(f)
+@ main def main(): Unit = {
+  val f: Func = 2 * sin * cos
+  val F: Func = f.integral // 0.33 cos(3ln(x))
+  println((0 until 6).map(F(_)))
 }
