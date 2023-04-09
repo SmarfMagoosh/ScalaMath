@@ -150,8 +150,8 @@ private class Tetr(f: Func, g: Func) extends Func {
   val _1: Func = f
   val _2: Func = g
   def of: Double => Double = (d: Double) => Math.pow(f(d), g(d))
-  def prime: Func = Erf() // TODO solve
-  def integral: Func = Erf() // TODO solve
+  def prime: Func = this * ((g.prime * ln(f) + ((g * f.prime) / f)))
+  def integral: Func = Erf()
   override def simplify: Func = if f *= 1 then f(1) ** g else if g *= 1 then f ** g(1) else super.simplify
 }
 
@@ -179,6 +179,7 @@ private class Poly(exp: Double) extends Func {
   def of: Double => Double = (x: Double) => Math.pow(x, exp)
   def prime: Func = exp * Poly(exp - 1)
   def integral: Func = (1.0 / (exp + 1)) * Poly(exp + 1)
+  override def simplify: Func = if _1 == 0 then Constant(1) else super.simplify
 }
 
 private class Exp(base: Double) extends Func {
