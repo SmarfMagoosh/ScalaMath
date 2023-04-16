@@ -1,0 +1,143 @@
+[debug] > Exec(early(addDefaultCommands), None, None)
+[debug] > Exec(addDefaultCommands, None, None)
+[debug] > Exec(early(initialize), None, None)
+[debug] > Exec(initialize, None, None)
+[debug] > Exec(early(addPluginSbtFile="""C:\Users\DREHEREN20\AppData\Local\Temp\idea1.sbt"""), None, None)
+[debug] > Exec(addPluginSbtFile="""C:\Users\DREHEREN20\AppData\Local\Temp\idea1.sbt""", None, None)
+[debug] > Exec(boot, None, None)
+[debug] > Exec(writeSbtVersion, None, None)
+[debug] > Exec(reload, None, None)
+[debug] > Exec(sbtStashOnFailure, None, None)
+[debug] > Exec(onFailure loadFailed, None, None)
+[debug] > Exec(loadp, None, None)
+[info] welcome to sbt 1.8.2 (Oracle Corporation Java 19.0.1)
+[debug]       Load.loadUnit: plugins took 222.5131ms
+[debug]       Load.loadUnit: defsScala took 0.6069ms
+[debug] [Loading] Scanning directory C:\Users\DREHEREN20\.sbt\1.0\plugins
+[debug] [Loading] Found non-root projects 
+[debug] [Loading] Done in C:\Users\DREHEREN20\.sbt\1.0\plugins, returning: ()
+[debug] deducing auto plugins based on known facts Set(Atom(sbt.plugins.CorePlugin)) and clauses Clauses(Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.ScriptedPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.SbtPlugin),Set(Atom(sbt.ScriptedPlugin)))
+[debug] Clause(Atom(sbt.plugins.SemanticdbPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JUnitXmlReportPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.MiniDependencyTreePlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.plugins.IvyPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.SemanticdbPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.JUnitXmlReportPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.Giter8TemplatePlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.MiniDependencyTreePlugin))))
+[debug]   :: deduced result: Matched(sbt.plugins.CorePlugin,sbt.plugins.Giter8TemplatePlugin,sbt.plugins.IvyPlugin,sbt.plugins.JvmPlugin,sbt.plugins.MiniDependencyTreePlugin,sbt.plugins.JUnitXmlReportPlugin,sbt.plugins.SemanticdbPlugin)
+[debug] Plugins.deducer#function took 45.5905 ms
+[debug]           Load.resolveProject(global-plugins) took 134.2799ms
+[debug]         Load.loadTransitive: finalizeProject(Project(id global-plugins, base: C:\Users\DREHEREN20\.sbt\1.0\plugins, plugins: List(<none>))) took 235.7877ms
+[debug] [Loading] Done in C:\Users\DREHEREN20\.sbt\1.0\plugins, returning: (global-plugins)
+[debug]       Load.loadUnit: loadedProjectsRaw took 303.2174ms
+[debug]       Load.loadUnit: cleanEvalClasses took 0.604ms
+[debug]     Load.loadUnit(file:/C:/Users/DREHEREN20/.sbt/1.0/plugins/, ...) took 549.9784ms
+[debug]   Load.apply: load took 950.5429ms
+[debug]   Load.apply: resolveProjects took 16.0589ms
+[debug]   Load.apply: finalTransforms took 133.1828ms
+[debug]   Load.apply: config.delegates took 15.0788ms
+[debug]   Load.apply: Def.make(settings)... took 947.3106ms
+[debug]   Load.apply: structureIndex took 188.9377ms
+[debug]   Load.apply: mkStreams took 2.5707ms
+[info] loading global plugins from C:\Users\DREHEREN20\.sbt\1.0\plugins
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug] Load.defaultLoad until apply took 4794.4656ms
+[debug]           Load.loadUnit: plugins took 41.7221ms
+[debug]           Load.loadUnit: defsScala took 0.0075ms
+[debug] [Loading] Scanning directory C:\Users\DREHEREN20\OneDrive - Grove City College\Desktop\Stuff\school\GitHub\ScalaMath\ScalaMath\project
+[debug]             Load.loadUnit: mkEval took 10.4003ms
+[debug] [Loading] Found non-root projects 
+[debug] [Loading] Done in C:\Users\DREHEREN20\OneDrive - Grove City College\Desktop\Stuff\school\GitHub\ScalaMath\ScalaMath\project, returning: ()
+[debug] deducing auto plugins based on known facts Set(Atom(sbt.plugins.CorePlugin)) and clauses Clauses(Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.ScriptedPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.SbtPlugin),Set(Atom(sbt.ScriptedPlugin)))
+[debug] Clause(Atom(sbt.plugins.SemanticdbPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JUnitXmlReportPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.MiniDependencyTreePlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.plugins.IvyPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.SemanticdbPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.JUnitXmlReportPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.Giter8TemplatePlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.MiniDependencyTreePlugin))))
+[debug]   :: deduced result: Matched(sbt.plugins.CorePlugin,sbt.plugins.Giter8TemplatePlugin,sbt.plugins.IvyPlugin,sbt.plugins.JvmPlugin,sbt.plugins.MiniDependencyTreePlugin,sbt.plugins.JUnitXmlReportPlugin,sbt.plugins.SemanticdbPlugin)
+[debug] Plugins.deducer#function took 2.4767 ms
+[info] loading settings for project scalamath-build from idea1.sbt ...
+[debug]               Load.resolveProject(scalamath-build) took 3.9082ms
+[debug]             Load.loadTransitive: finalizeProject(Project(id scalamath-build, base: C:\Users\DREHEREN20\OneDrive - Grove City College\Desktop\Stuff\school\GitHub\ScalaMath\ScalaMath\project, plugins: List(<none>))) took 7.1658ms
+[debug] [Loading] Done in C:\Users\DREHEREN20\OneDrive - Grove City College\Desktop\Stuff\school\GitHub\ScalaMath\ScalaMath\project, returning: (scalamath-build)
+[debug]           Load.loadUnit: loadedProjectsRaw took 530.6307ms
+[debug]           Load.loadUnit: cleanEvalClasses took 10.5298ms
+[debug]         Load.loadUnit(file:/C:/Users/DREHEREN20/OneDrive%20-%20Grove%20City%20College/Desktop/Stuff/school/GitHub/ScalaMath/ScalaMath/project/, ...) took 584.8755ms
+[debug]       Load.apply: load took 587.6847ms
+[debug]       Load.apply: resolveProjects took 0.1637ms
+[debug]       Load.apply: finalTransforms took 20.1398ms
+[debug]       Load.apply: config.delegates took 0.7907ms
+[debug]       Load.apply: Def.make(settings)... took 154.0475ms
+[debug]       Load.apply: structureIndex took 61.5981ms
+[debug]       Load.apply: mkStreams took 0.0032ms
+[info] loading project definition from C:\Users\DREHEREN20\OneDrive - Grove City College\Desktop\Stuff\school\GitHub\ScalaMath\ScalaMath\project
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[warn] Unrecognized repository Scala Plugin Bundled Repository, ignoring it
+[warn] Unrecognized repository Scala Plugin Bundled Repository, ignoring it
+[debug]     Load.loadUnit: plugins took 3113.9014ms
+[debug]     Load.loadUnit: defsScala took 0.0068ms
+[debug] [Loading] Scanning directory C:\Users\DREHEREN20\OneDrive - Grove City College\Desktop\Stuff\school\GitHub\ScalaMath\ScalaMath
+[debug]       Load.loadUnit: mkEval took 0.4392ms
+[debug] [Loading] Found root project root w/ remaining 
+[debug] deducing auto plugins based on known facts Set(Atom(sbt.plugins.CorePlugin)) and clauses Clauses(Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.ScriptedPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.SbtPlugin),Set(Atom(sbt.ScriptedPlugin)))
+[debug] Clause(Atom(sbt.plugins.SemanticdbPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JUnitXmlReportPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.MiniDependencyTreePlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(org.jetbrains.sbt.StructurePlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(org.jetbrains.sbt.IdeaShellPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(org.jetbrains.sbt.indices.SbtIntellijIndicesPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.plugins.IvyPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.SemanticdbPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.JUnitXmlReportPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.Giter8TemplatePlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.MiniDependencyTreePlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(org.jetbrains.sbt.StructurePlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(org.jetbrains.sbt.IdeaShellPlugin)))
+[debug] Clause(And(Set(Atom(sbt.plugins.CorePlugin), Atom(sbt.plugins.JvmPlugin))),Set(Atom(org.jetbrains.sbt.indices.SbtIntellijIndicesPlugin))))
+[debug]   :: deduced result: Matched(sbt.plugins.CorePlugin,sbt.plugins.Giter8TemplatePlugin,sbt.plugins.IvyPlugin,sbt.plugins.JvmPlugin,sbt.plugins.SemanticdbPlugin,org.jetbrains.sbt.indices.SbtIntellijIndicesPlugin,sbt.plugins.JUnitXmlReportPlugin,org.jetbrains.sbt.IdeaShellPlugin,org.jetbrains.sbt.StructurePlugin,sbt.plugins.MiniDependencyTreePlugin)
+[debug] Plugins.deducer#function took 4.1058 ms
+[info] loading settings for project root from build.sbt ...
+[debug]         Load.resolveProject(root) took 49.9584ms
+[debug]       Load.loadTransitive: finalizeProject(Project(id root, base: C:\Users\DREHEREN20\OneDrive - Grove City College\Desktop\Stuff\school\GitHub\ScalaMath\ScalaMath, plugins: List(<none>))) took 56.639ms
+[debug] [Loading] Done in C:\Users\DREHEREN20\OneDrive - Grove City College\Desktop\Stuff\school\GitHub\ScalaMath\ScalaMath, returning: (root)
+[debug]     Load.loadUnit: loadedProjectsRaw took 8411.8933ms
+[debug]     Load.loadUnit: cleanEvalClasses took 47.7686ms
+[debug]   Load.loadUnit(file:/C:/Users/DREHEREN20/OneDrive%20-%20Grove%20City%20College/Desktop/Stuff/school/GitHub/ScalaMath/ScalaMath/, ...) took 11575.828ms
+[debug] Load.apply: load took 11582.5611ms
+[debug] Load.apply: resolveProjects took 0.2657ms
+[debug] Load.apply: finalTransforms took 59.7934ms
+[debug] Load.apply: config.delegates took 0.8546ms
+[debug] Load.apply: Def.make(settings)... took 164.8414ms
+[debug] Load.apply: structureIndex took 46.4546ms
+[debug] Load.apply: mkStreams took 0.003ms
+[info] set current project to ScalaMath (in build file:/C:/Users/DREHEREN20/OneDrive%20-%20Grove%20City%20College/Desktop/Stuff/school/GitHub/ScalaMath/ScalaMath/)
+[debug] > Exec(sbtPopOnFailure, None, None)
+[debug] > Exec(resumeFromFailure, None, None)
+[debug] > Exec(notifyUsersAboutShell, None, None)
+[debug] > Exec(iflast shell, None, None)
+[debug] > Exec(; set ideaPort in Global := 49788 ; idea-shell, None, None)
+[debug] > Exec(set ideaPort in Global := 49788, None, None)
+[info] Defining Global / ideaPort
+[info] The new value will be used by Compile / compile, Test / compile
+[debug] Defining 
+[debug] 	Global / ideaPort
+[debug] 
+[debug] The new value will be used by 
+[debug] 	Compile / compile
+[debug] 	Test / compile
+[info] Reapplying settings...
+[info] set current project to ScalaMath (in build file:/C:/Users/DREHEREN20/OneDrive%20-%20Grove%20City%20College/Desktop/Stuff/school/GitHub/ScalaMath/ScalaMath/)
+[debug] > Exec(idea-shell, None, None)

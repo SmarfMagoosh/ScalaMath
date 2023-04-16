@@ -10,7 +10,7 @@ private def tests: List[Double] = for _ <- (0 to 50).toList yield r.nextInt(100)
 extension [T <: Number](d: T)
   def +(f: Func): Func = (Constant(d.doubleValue()) + f).simplify
   def -(f: Func): Func = (Constant(d.doubleValue()) - f).simplify
-  def *(f: Func): Func = Scalar(d.doubleValue(), f)
+  def *(f: Func): Func = if f.isConstant then Constant(d.doubleValue() * f(0)) else Scalar(d.doubleValue(), f)
   def /(f: Func): Func = (Constant(d.doubleValue()) / f).simplify
   def **(f: Func): Func = if f == x then Exp(d.doubleValue()) else Comp(Exp(d.doubleValue()), f).simplify
   def ==(f: Func): Boolean = Constant(d.doubleValue()) == f
@@ -127,7 +127,7 @@ private class Product(f: Func, g: Func) extends Func {
         case _ => Erf()
       }
     }
-  } // TODO try to solve
+  }
   override def simplify: Func = {
     if f.isPoly && g.isPoly then Scalar(f.scale * g.scale, x**(f.as[Poly]._1 + g.as[Poly]._1)).simplify
     else if f.isExp && g.isExp then
@@ -186,6 +186,7 @@ private class Scalar(scalar: Double, f: Func) extends Func {
   override def as[T <: Func]: T = f.as[T]
 }
 
+// TESTED
 private class Constant(constant: Double) extends Func {
   val _1: Double = constant
   def of: Double => Double = _ => constant
@@ -193,6 +194,7 @@ private class Constant(constant: Double) extends Func {
   def integral: Func = constant * x
 }
 
+// TESTED
 private class Poly(exp: Double) extends Func {
   val _1: Double = exp
   def of: Double => Double = (x: Double) => Math.pow(x, exp)
@@ -201,20 +203,23 @@ private class Poly(exp: Double) extends Func {
   override def simplify: Func = if _1 == 0 then Constant(1) else super.simplify
 }
 
+// TESTED
 private class Exp(base: Double) extends Func {
   val _1: Double = base
   def of: Double => Double = (x: Double) => Math.pow(base, x)
-  def prime: Func = Scalar(ln(base), this).simplify
-  def integral: Func = Scalar(1.0 / ln(base), this).simplify
+  def prime: Func = Scalar(ln(base), this)
+  def integral: Func = Scalar(1.0 / ln(base), this)
 }
 
+// TESTED
 private class Log(base: Double) extends Func {
   val _1: Double = base
   def of: Double => Double = (x: Double) => Math.log(x) / Math.log(base)
   def prime: Func = 1.0 / (ln(base) * x)
-  def integral: Func = Sum(Product(x, this).simplify, Scalar(-1.0 / ln(base), x).simplify).simplify
+  def integral: Func = Sum(Product(x, this), Scalar(-1.0 / ln(base), x))
 }
 
+// TESTED
 private class Sine extends Func {
   def of: Double => Double = (x: Double) => Math.sin(x)
   def prime: Func = cos
@@ -222,6 +227,7 @@ private class Sine extends Func {
   override def isInverseOf(f: Func): Boolean = f.funcType == "ArcSine"
 }
 
+// TESTED
 private class Cosine extends Func {
   def of: Double => Double = (x: Double) => Math.cos(x)
   def prime: Func = -1.0 * sin
@@ -229,6 +235,7 @@ private class Cosine extends Func {
   override def isInverseOf(f: Func): Boolean = f.funcType == "ArcCosine"
 }
 
+// TESTED
 private class Tangent extends Func {
   def of: Double => Double = (x: Double) => Math.tan(x)
   def prime: Func = sec ** 2
@@ -236,6 +243,7 @@ private class Tangent extends Func {
   override def isInverseOf(f: Func): Boolean = f.funcType == "ArcTangent"
 }
 
+// TESTED
 private class Secant extends Func {
   def of: Double => Double = (x: Double) => 1.0 / Math.cos(x)
   def prime: Func = sec * tan
@@ -243,6 +251,7 @@ private class Secant extends Func {
   override def isInverseOf(f: Func): Boolean = f.funcType == "ArcSecant"
 }
 
+// TESTED
 private class Cosecant extends Func {
   def of: Double => Double = (x: Double) => 1.0 / Math.sin(x)
   def prime: Func = -1.0 * csc * cot
@@ -250,6 +259,7 @@ private class Cosecant extends Func {
   override def isInverseOf(f: Func): Boolean = f.funcType == "ArcCosecant"
 }
 
+// TESTED
 private class Cotangent extends Func {
   def of: Double => Double = (x: Double) => 1.0 / Math.tan(x)
   def prime: Func = -1 * (csc ** 2)
@@ -258,42 +268,42 @@ private class Cotangent extends Func {
 }
 
 private class ArcSine extends Func {
-  def of: Double => Double = (x: Double) => Math.asin(x)
+  def of: Double => Double = (x: Double) => Math.asin(if x.abs == 1 then x else  x % 1)
   def prime: Func = 1.0 / sqrt(1 - (x ** 2))
   def integral: Func = (x * this) + sqrt(1 - (x ** 2))
   override def isInverseOf(f: Func): Boolean = f.funcType == "Sine"
 }
 
 private class ArcCosine extends Func {
-  def of: Double => Double = (x: Double) => Math.acos(x)
+  def of: Double => Double = (x: Double) => Math.acos(if x.abs == 1 then x else  x % 1)
   def prime: Func = -1.0 * arcsin.prime
   def integral: Func = (x * this) - sqrt(1 - (x ** 2))
   override def isInverseOf(f: Func): Boolean = f.funcType == "Cosine"
 }
 
 private class ArcTangent extends Func {
-  def of: Double => Double = (x: Double) => Math.atan(x)
+  def of: Double => Double = (x: Double) => Math.atan(if x.abs == 1 then x else  x % 1)
   def prime: Func = 1.0 / (1.0 + (x ** 2))
   def integral: Func = (x * this) - (0.5 * ln(1 + (x ** 2)))
   override def isInverseOf(f: Func): Boolean = f.funcType == "Tangent"
 }
 
 private class ArcSecant extends Func {
-  def of: Double => Double = (x: Double) => 1.0 / Math.acos(x)
+  def of: Double => Double = (x: Double) => 1.0 / Math.acos(if x.abs == 1 then x else  x % 1)
   def prime: Func = 1.0 / Product(x, sqrt(x ** 2) - 1)
   def integral: Func = (x * this) - ln((x + sqrt((x ** 2) - 1)).abs)
   override def isInverseOf(f: Func): Boolean = f.funcType == "Secant"
 }
 
 private class ArcCosecant extends Func {
-  def of: Double => Double = (x: Double) => 1.0 / Math.asin(x)
+  def of: Double => Double = (x: Double) => 1.0 / Math.asin(if x.abs == 1 then x else  x % 1)
   def prime: Func = -1 * arcsec.prime
   def integral: Func = (x * this) + ln((x + sqrt((x ** 2) - 1)).abs)
   override def isInverseOf(f: Func): Boolean = f.funcType == "Cosecant"
 }
 
 private class ArcCotangent extends Func {
-  def of: Double => Double = (x: Double) => 1.0 / Math.atan(x)
+  def of: Double => Double = (x: Double) => 1.0 / Math.atan(if x.abs == 1 then x else  x % 1)
   def prime: Func = -1 * arctan.prime
   def integral: Func = (x * this) + (0.5 * ln((1 + (x ** 2))).abs)
   override def isInverseOf(f: Func): Boolean = f.funcType == "Cotangent"
@@ -373,8 +383,7 @@ val tau = Math.TAU
 // Probability
 
 // solve linear equations
-@ main def main(): Unit = {
-  val f: Func = 2 * sin * cos
-  val F: Func = f.integral // 0.33 cos(3ln(x))
-  println((0 until 6).map(F(_)))
+
+@main def main(): Unit = {
+  
 }
